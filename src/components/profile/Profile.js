@@ -1,4 +1,4 @@
-import { CusstomerForm } from "./CustomerForm";
+import { CustomerForm } from "./CustomerForm";
 import { EmployeeForm } from "./EmployeeForm";
 
 export const Profile = () => {
@@ -8,6 +8,6 @@ export const Profile = () => {
   if (honeyUserObj.staff) {
     return <EmployeeForm />;
   } else {
-    return <CusstomerForm />;
+    return <CustomerForm />;
   }
 };
