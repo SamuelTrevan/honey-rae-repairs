@@ -7,6 +7,7 @@ export const Ticket = ({
   getAllTickets,
 }) => {
   let assigneedEmployee = null;
+
   if (ticketObject.employeeTickets.length > 0) {
     const ticketEmployeeRelationship = ticketObject.employeeTickets[0];
     assigneedEmployee = employees.find(
@@ -17,6 +18,39 @@ export const Ticket = ({
   const userEmployee = employees.find(
     (employee) => employee.userId === currentUser.id
   );
+
+  const canClosse = () => {
+    if (
+      userEmployee?.id === assigneedEmployee?.id &&
+      ticketObject.dateCompleted === ""
+    ) {
+      return (
+        <button onClick={closeTicket} className="ticket_finish">
+          Finish
+        </button>
+      );
+    } else {
+      return "";
+    }
+  };
+
+  const closeTicket = () => {
+    const copy = {
+      userId: ticketObject.userId,
+      description: ticketObject.description,
+      emergency: ticketObject.emergency,
+      dateCompleted: new Date(),
+    };
+    return fetch(`http://localhost:8088/serviceTickets/${ticketObject.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(copy),
+    })
+      .then((response) => response.json())
+      .then(getAllTickets());
+  };
 
   const buttonOrNoButton = () => {
     if (currentUser.staff) {
@@ -68,6 +102,7 @@ export const Ticket = ({
                 : ""
             }`
           : buttonOrNoButton()}
+        {canClosse()}
       </footer>
     </div>
   );
