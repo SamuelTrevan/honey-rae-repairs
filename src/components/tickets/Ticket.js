@@ -34,6 +34,27 @@ export const Ticket = ({
     }
   };
 
+  const deleteButton = () => {
+    if (!currentUser.staff) {
+      return (
+        <button
+          className="ticket_delete"
+          onClick={() => {
+            fetch(`http://localhost:8088/serviceTickets/${ticketObject.id}`, {
+              method: "DELETE",
+            }).then(() => {
+              getAllTickets();
+            });
+          }}
+        >
+          Delete
+        </button>
+      );
+    } else {
+      return "";
+    }
+  };
+
   const closeTicket = () => {
     const copy = {
       userId: ticketObject.userId,
@@ -103,6 +124,7 @@ export const Ticket = ({
             }`
           : buttonOrNoButton()}
         {canClosse()}
+        {deleteButton()}
       </footer>
     </div>
   );
